@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
 
 //Clase Server
 class Server {
@@ -17,7 +18,11 @@ class Server {
     }
 
     middlewares(){
-        //llama al directorio publicpara usar el contenido de los archivos a renderzar
+
+        //CORS
+        this.app.use( cors() );
+
+        //llama al directorio public para usar el contenido de los archivos a renderzar de forma estatico
         this.app.use(express.static('public'))
     }
 
@@ -30,7 +35,7 @@ class Server {
         });
 
         this.app.put('/api', (req, res) => {
-            res.json({
+            res.status(500).json({
                 msg: 'put API'
             });
         });
