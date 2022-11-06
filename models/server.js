@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { conexionDB } = require('../database/config.db');
 
 //Clase Server
 class Server {
@@ -12,6 +13,9 @@ class Server {
         this.port = process.env.PORT;
 
         this.routesPath = '/api/users';
+
+        //Realiza conexion a la base de datos
+        this.conectarDB();
 
         //Llamadas a los Middlewares
         this.middlewares();
@@ -35,6 +39,10 @@ class Server {
     routes(){
         
         this.app.use( this.routesPath , require('../routes/user.routes'));
+    }
+
+    async conectarDB(){
+        await conexionDB();
     }
 
     //funcion de escucha al puerto para levantar el servidor 

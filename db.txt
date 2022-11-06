@@ -1,0 +1,2 @@
+user: user_node_cafe
+pass: 1XGDTSEWgGAZvdt9
