@@ -30,12 +30,16 @@ const usuariosPut = (req, res = response) => {
 
 const usuariosPost = async(req, res = response) => {
 
+    //Revisa si express-validators ha recinido algún error en us verificacion
     const errors = validationResult(req);
+    
     if( !errors.isEmpty() ){
         return res.status(400).json(errors);
     }
 
+    //Destructuracion del body (parametros colocados en models/user.js)
     const { nombre, email, password, role }  = req.body;
+    //
     const user = new User( { nombre, password, email, role } );
 
     // Verificar si el correo existe 
