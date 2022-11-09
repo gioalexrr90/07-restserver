@@ -1,54 +1,47 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
-const { validationResult } = require('express-validator');
 
 const User = require('../models/user')
 
-const usuariosGet = (req = request, res = response) => {
+const usuariosGet = async(req = request, res = response) => {
 
-    const { q, nombre = 'No name', apikey, page = "1", limit } = req.query;
+    const { limite = 5, desde = 0 } = req.query;
+    const usuarios = await User.find()
+        .skip(Number(desde))
+        .limit(Number(limite));
 
     res.json({
-        msg: 'get API - controllers',
-        q,
-        nombre,
-        apikey,
-        page,
-        limit
+        msg: 'Información obtenida',
+        usuarios
     });
 };
 
-const usuariosPut = (req, res = response) => {
+const usuariosPut = async(req, res = response) => {
 
     const { id } = req.params;
+    const { _id, password, google, email, ...resto } = req.body;
+
+    //Calidar en base de datos
+    if(password){
+        //Encriptar password
+        const salt = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync( password, salt );
+    }
+
+    const usuario = await User.findByIdAndUpdate(id, resto);
     
     res.json({
-        msg: 'put API - controllers',
-        id
+        msg: 'Información actualizada',
+        usuario
     });
 };
 
 const usuariosPost = async(req, res = response) => {
 
-    //Revisa si express-validators ha recinido algún error en us verificacion
-    const errors = validationResult(req);
-    
-    if( !errors.isEmpty() ){
-        return res.status(400).json(errors);
-    }
-
     //Destructuracion del body (parametros colocados en models/user.js)
-    const { nombre, email, password, role }  = req.body;
+    const { name, email, password, role }  = req.body;
     //
-    const user = new User( { nombre, password, email, role } );
-
-    // Verificar si el correo existe 
-    const existeEmail = await User.findOne({ email });
-    if(existeEmail){
-        return res.status(400).json({
-            msg: 'Ese correo ya esta registrado.'
-        });
-    }
+    const user = new User( { name, password, email, role } );
 
     //Encriptar password
     const salt = bcryptjs.genSaltSync();

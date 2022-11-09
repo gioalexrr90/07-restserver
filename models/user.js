@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const userSchema = Schema({
-    nombre: {
+    name: {
         type: String,
         required: [true, 'El nombre  es obligatorio']
     },
@@ -37,5 +37,11 @@ const userSchema = Schema({
         default: false
     },
 });
+
+//Esta funcioncion permite liminar del resultado el __v y password como respuesta en el res, enviando solo "usuario" que son los datos restantes 
+userSchema.methods.toJSON = function() {
+    const { __v, password, ...usuario } = this.toObject();
+    return usuario;
+}
 
 module.exports = model( 'Usuario', userSchema );
