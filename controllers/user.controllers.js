@@ -63,7 +63,7 @@ const usuariosPost = async(req, res = response) => {
     await user.save();
 
     res.json({
-        msg: 'post API - controllers',
+        msg: 'User added',
         user
     });
 };

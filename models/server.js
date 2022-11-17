@@ -13,6 +13,7 @@ class Server {
         this.port = process.env.PORT;
 
         this.routesPath = '/api/users';
+        this.authPath = '/api/auth';
 
         //Realiza conexion a la base de datos
         this.conectarDB();
@@ -37,7 +38,7 @@ class Server {
 
     //rutas del servidor, en este ejeplo es http://localhost:8081/api
     routes(){
-        
+        this.app.use( this.authPath , require('../routes/auth.routes'));
         this.app.use( this.routesPath , require('../routes/user.routes'));
     }
 
