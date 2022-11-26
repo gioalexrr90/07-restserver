@@ -80,8 +80,8 @@ const usuariosDelete = async(req, res = response) => {
     res.json({
         msg: 'Usuario eliminado',
         usuario,
-        uid,
-        usuarioAutenticado
+        //uid,
+        //usuarioAutenticado
     });
 };
 
